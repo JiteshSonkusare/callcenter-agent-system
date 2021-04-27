@@ -2,6 +2,7 @@
 
 ## Get Code
 	1. Clone repository in your local system
+	OR
 	2. Download the code file
 	
 ## Applicaiton Version
