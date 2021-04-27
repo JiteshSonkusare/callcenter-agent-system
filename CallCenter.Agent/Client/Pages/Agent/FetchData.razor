@@ -1,0 +1,78 @@
+﻿@page "/agent"
+@inject SkillService SkillsService
+@inject HttpClient client
+@inject IJSRuntime js
+
+<h3>Agents</h3>
+<div class="form-group">
+    <a class="btn btn-success" href="agent/create"><i class="oi oi-plus"></i> Add New Agent</a>
+</div>
+<br>
+
+@if (agents == null)
+{
+    <text>Loading...</text>
+}
+else if (agents.Length == 0)
+{
+    <text>No Records Found.</text>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>User Id</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Skill</th>
+                <th>CreatedBy</th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Agent ag in agents)
+            {
+            <tr>
+                <td>@ag.UserId</td>
+                <td>@ag.Name</td>
+                <td>@ag.PhoneNumber</td>
+                <td>@ag.Email</td>
+                <td>@GetSkill(ag.Skill)</td>
+                <td>@ag.CreatedBy</td>
+                <td>@ag.Created</td>
+                <td>
+                    <a class="btn btn-success" href="agent/edit/@ag.Id">Edit</a>
+                    <button class="btn btn-danger" @onclick="@(() => Delete(ag.Id))">Delete</button>
+                </td>
+            </tr>
+            }
+
+        </tbody>
+    </table>
+}
+@code {
+    Agent[] agents { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        agents = await client.GetFromJsonAsync<Agent[]>("api/agent");
+    }
+
+    async Task Delete(int agentId)
+    {
+        var ag = agents.First(x => x.Id == agentId);
+        if (await js.InvokeAsync<bool>("confirm", $"Do you want to delete agent: {ag.UserId}'?"))
+        {
+            await client.DeleteAsync($"api/agent/{agentId}");
+            await OnInitializedAsync();
+        }
+    }
+
+    string GetSkill(int id)
+    {
+        return SkillsService.GetSkillById(id);
+    }
+}
+

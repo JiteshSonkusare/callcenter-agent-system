@@ -1,0 +1,26 @@
+﻿@page "/agent/edit/{agentId:int}"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+@inject IJSRuntime js
+
+<h3>Edit</h3>
+
+<Form ButtonText="Update" ag="ag" OnValidSubmit="@EditAgent" />
+
+@code {
+    [Parameter] public int agentId { get; set; }
+    Agent ag = new Agent();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        ag = await http.GetFromJsonAsync<Agent>($"api/agent/{agentId}");
+    }
+
+    async Task EditAgent()
+    {
+        await http.PutAsJsonAsync("api/agent", ag);
+        await js.InvokeVoidAsync("alert", $"Updated Successfully!");
+        uriHelper.NavigateTo("agent");
+
+    }
+}

@@ -1,0 +1,66 @@
+﻿@inject SkillService SkillsService
+
+<EditForm Model="@ag" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>User Id :</label>
+        <div>
+            <InputText @bind-Value="@ag.UserId" />
+            <ValidationMessage For="@(() => ag.UserId)" />
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Name :</label>
+            <div>
+                <InputText @bind-Value="@ag.Name" />
+                <ValidationMessage For="@(() => ag.Name)" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Phone Number :</label>
+            <div>
+                <InputNumber @bind-Value="@ag.PhoneNumber" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Email :</label>
+            <div>
+                <InputText @bind-Value="@ag.Email" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div>
+            <label>Skill :</label>
+            <select class="form-control selectpicker" @bind="ag.Skill">
+                <option value="-1">--select--</option>
+                @foreach (var item in skills)
+                {
+<option value="@item.Id">@item.Name</option>                }
+            </select>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        @ButtonText
+    </button>
+
+</EditForm>
+
+
+@code { [Parameter] public Agent ag { get; set; }
+            [Parameter] public string ButtonText { get; set; } = "Save";
+            [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+
+            Skill[] skills;
+
+            protected override async Task OnInitializedAsync()
+            {
+                skills = await SkillsService.GetSkills();
+            } }

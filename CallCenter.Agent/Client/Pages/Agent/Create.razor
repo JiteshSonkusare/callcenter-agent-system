@@ -1,0 +1,16 @@
+﻿@page "/agent/create"
+@inject HttpClient http
+@inject NavigationManager uriHelper
+
+<h3>Create</h3>
+
+<Form ButtonText="Create Agent" ag="@ag" OnValidSubmit="@CreateAgent" />
+
+@code {
+    Agent ag = new Agent();
+    async Task CreateAgent()
+    {
+        await http.PostAsJsonAsync("api/agent", ag);
+        uriHelper.NavigateTo("agent");
+    }
+}

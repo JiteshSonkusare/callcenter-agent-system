@@ -1,0 +1,13 @@
+﻿@page "/counter"
+<h1>System Restart</h1>
+
+<p>Click to restart server to patch system: <strong>@msg</strong></p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code { private string msg = string.Empty;
+
+            private void IncrementCount()
+            {
+                msg = "Server restarted succesfully!";
+            } }

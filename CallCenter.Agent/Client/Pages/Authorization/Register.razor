@@ -1,0 +1,58 @@
+﻿@page "/register"
+@layout AuthLayout
+@inject NavigationManager navigationManager
+@inject CustomStateProvider authStateProvider
+
+
+<div class="card">
+    <h4 class="card-header">Register</h4>
+    <div class="card-body">
+        <EditForm class="form-signin" OnValidSubmit="OnSubmit" Model="registerRequest">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label>User Id</label>
+                <InputText @bind-Value="registerRequest.UserName" class="form-control" />
+                <ValidationMessage For="@(() => registerRequest.UserName)" />
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <InputText @bind-Value="registerRequest.Password" type="password" class="form-control" />
+                <ValidationMessage For="@(() => registerRequest.Password)" />
+            </div>
+
+            <div class="form-group">
+                <label>Password Confirmation</label>
+                <InputText type="password" id="inputPasswordConfirm" class="form-control" @bind-Value="@registerRequest.PasswordConfirm" />
+                <ValidationMessage For="@(() => registerRequest.PasswordConfirm)" />
+            </div>
+
+            <button class="btn btn-primary">
+                Register
+            </button>
+
+            <label class="text-danger">@error</label>
+            <NavLink href="login">
+                <h6 class="font-weight-normal text-center">Already have an account? Click here to login</h6>
+            </NavLink>
+        </EditForm>
+    </div>
+</div>
+
+@functions{ RegisterRequest registerRequest { get; set; } = new RegisterRequest();
+    string error { get; set; }
+
+    async Task OnSubmit()
+    {
+        error = null;
+        try
+        {
+            await authStateProvider.Register(registerRequest);
+            navigationManager.NavigateTo("");
+        }
+        catch (Exception ex)
+        {
+            error = ex.Message;
+        }
+    } }

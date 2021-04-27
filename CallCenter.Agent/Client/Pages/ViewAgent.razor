@@ -1,0 +1,53 @@
+﻿@page "/viewagent"
+@inject SkillService SkillsService
+@using CallCenter.Agent.Shared.Models
+@inject HttpClient Http
+
+<h1>Agent List</h1>
+
+@if (agents == null)
+{
+<p><em>Loading...</em></p> }
+else
+{
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User Id</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Skill</th>
+            <th>CreatedBy</th>
+            <th>Created</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (CallCenter.Agent.Shared.Models.Agent ag in agents)
+        {
+<tr>
+    <td>@ag.UserId</td>
+    <td>@ag.Name</td>
+    <td>@ag.PhoneNumber</td>
+    <td>@ag.Email</td>
+    <td>@GetSkill(ag.Skill)</td>
+    <td>@ag.CreatedBy</td>
+    <td>@ag.Created</td>
+
+</tr>}
+
+    </tbody>
+</table>}
+
+@code { private CallCenter.Agent.Shared.Models.Agent[] agents;
+
+            protected override async Task OnInitializedAsync()
+            {
+                agents = await Http.GetFromJsonAsync<CallCenter.Agent.Shared.Models.Agent[]>("/api/agent");
+            }
+
+            string GetSkill(int id)
+            {
+                return SkillsService.GetSkillById(id);
+            } }

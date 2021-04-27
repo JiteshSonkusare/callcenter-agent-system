@@ -1,0 +1,14 @@
+﻿@page "/"
+
+<AuthorizeView>
+    <Authorized>
+        <h1>Hello @context.User.Identity.Name </h1>
+
+        <p>Welcome to Call Center Agent system</p>
+
+        <SurveyPrompt Title="How is Call Center Agent working for you?" />
+    </Authorized>
+    <Authorizing>
+        <h1>Loading ...</h1>
+    </Authorizing>
+</AuthorizeView>
