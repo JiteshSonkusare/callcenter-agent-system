@@ -1,7 +1,7 @@
 # CallCenter-Agent-System
 
 ## Get Code
-	1. Clone repository in your local system or 
+	1. Clone repository in your local system
 	2. Download the code file
 	
 ## Applicaiton Version
