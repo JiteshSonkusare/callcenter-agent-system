@@ -8,6 +8,7 @@ using CallCenter.Agent.Server.Auth.Models;
 using CallCenter.Agent.Shared.Models;
 using CallCenter.Agent.Server.Auth.Data;
 using System;
+using System.Collections.Generic;
 
 namespace CallCenter.Agent.Server.Controllers
 {
@@ -122,6 +123,20 @@ namespace CallCenter.Agent.Server.Controllers
         {
             try
             {
+                var roles = new List<string>
+                {
+                    "Admin",
+                    "TeamLead",
+                    "SystemEngineer",
+                    "OperationEngineer"
+                };
+
+                var validatedRole = roles.Contains(userRole.Role) ? roles.Find(x => x.Equals(userRole.Role, StringComparison.InvariantCultureIgnoreCase)) : null;
+                if (validatedRole == null)
+                {
+                    return NotFound($"Can not configure this role: '{userRole.Role}'. Please use <Admin>, <TeamLead>, <SystemEngineer>, <OperationEngineer>.");
+                }
+
                 var user = await _userManager.FindByNameAsync(userRole.UserId);
                 if (user == null)
                 {
@@ -130,12 +145,12 @@ namespace CallCenter.Agent.Server.Controllers
                 else
                 {
                     string roleId = string.Empty;
-                    var roleExist = _context.Roles.FirstOrDefault(x => x.Name.Equals(userRole.Role));
+                    var roleExist = _context.Roles.FirstOrDefault(x => x.Name.Equals(validatedRole));
 
                     if (roleExist == null)
                     {
                         string id = Guid.NewGuid().ToString();
-                        await _context.Roles.AddAsync(new IdentityRole { Id = id, Name = userRole.Role });
+                        await _context.Roles.AddAsync(new IdentityRole { Id = id, Name = validatedRole });
                         _context.SaveChanges();
                         roleId = id;
                     }
@@ -159,7 +174,7 @@ namespace CallCenter.Agent.Server.Controllers
                         _context.SaveChanges();
                     }
 
-                    return Ok($"{userRole.Role} role has been assign to user id {userRole.UserId}");
+                    return Ok($"{validatedRole} role has been assign to user id {userRole.UserId} successfully!");
                 }
             }
             catch (Exception ex)
