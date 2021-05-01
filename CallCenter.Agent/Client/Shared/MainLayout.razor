@@ -7,8 +7,12 @@
 </div>
 
 <div class="main">
-    <div class="top-row">
+    <div class="top-row px-4">
         <button type="button" class="btn btn-link ml-md-auto" @onclick="@LogoutClick">Logout</button>
+        @if (authStateProvider._currentUser != null)
+        {
+            <a href="">@authStateProvider._currentUser.UserName</a>
+        }
     </div>
 
     <div class="content px-4">

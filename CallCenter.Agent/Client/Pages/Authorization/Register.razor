@@ -28,6 +28,14 @@
                 <ValidationMessage For="@(() => registerRequest.PasswordConfirm)" />
             </div>
 
+            <label class="form-check-label">Select Roles</label>
+            <div class="form-check m-3">
+                @foreach (var role in UserRoleList())
+                {
+                    <input type="checkbox" class="form-check-input" @onchange="eventArgs => { CheckboxClicked(role, eventArgs.Value); }" />@role<br />
+                }
+            </div>
+
             <button class="btn btn-primary">
                 Register
             </button>
@@ -40,7 +48,8 @@
     </div>
 </div>
 
-@functions{ RegisterRequest registerRequest { get; set; } = new RegisterRequest();
+@functions{
+    RegisterRequest registerRequest { get; set; } = new RegisterRequest();
     string error { get; set; }
 
     async Task OnSubmit()
@@ -48,6 +57,13 @@
         error = null;
         try
         {
+            List<UserRole> userRole = new List<UserRole>();
+            foreach (var role in UserRoles)
+            {
+                userRole.Add(new UserRole { UserId = registerRequest.UserName, Role = role });
+            }
+            registerRequest.Roles = userRole;
+
             await authStateProvider.Register(registerRequest);
             navigationManager.NavigateTo("");
         }
@@ -55,4 +71,34 @@
         {
             error = ex.Message;
         }
-    } }
+    }
+
+    public List<string> UserRoles { get; set; } = new List<string>();
+    void CheckboxClicked(string roleId, object checkedValue)
+    {
+        if ((bool)checkedValue)
+        {
+            if (!UserRoles.Contains(roleId))
+            {
+                UserRoles.Add(roleId);
+            }
+        }
+        else
+        {
+            if (UserRoles.Contains(roleId))
+            {
+                UserRoles.Remove(roleId);
+            }
+        }
+    }
+
+    public List<String> UserRoleList()
+    {
+        List<String> c = new List<String>();
+        c.Add("Admin");
+        c.Add("TeamLead");
+        c.Add("SystemAdministrator");
+        c.Add("OperationEngineer");
+        return c;
+    }
+}

@@ -12,7 +12,7 @@ namespace CallCenter.Agent.Client.Services
     public class CustomStateProvider : AuthenticationStateProvider
     {
         private readonly IAuthService api;
-        private CurrentUser _currentUser;
+        public CurrentUser _currentUser;
         public CustomStateProvider(IAuthService api)
         {
             this.api = api;

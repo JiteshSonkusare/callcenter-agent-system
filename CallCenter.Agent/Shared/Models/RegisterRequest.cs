@@ -14,5 +14,7 @@ namespace CallCenter.Agent.Shared.Models
         [Required]
         [Compare(nameof(Password), ErrorMessage = "Passwords do not match!")]
         public string PasswordConfirm { get; set; }
+
+        public List<UserRole> Roles { get; set; } = null;
     }
 }

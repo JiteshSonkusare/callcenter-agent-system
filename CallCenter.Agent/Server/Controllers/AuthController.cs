@@ -50,13 +50,22 @@ namespace CallCenter.Agent.Server.Controllers
             var user = new ApplicationUser();
             user.UserName = parameters.UserName;
             var result = await _userManager.CreateAsync(user, parameters.Password);
-            if (!result.Succeeded) return BadRequest(result.Errors.FirstOrDefault()?.Description);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors.FirstOrDefault()?.Description);
+
+            if (result.Succeeded)
+            {
+                foreach (var userRole in parameters.Roles)
+                {
+                    var userRoleResponse = await AddUserRole(userRole).ConfigureAwait(false);
+                }
+            }
 
             return await Login(new LoginRequest
             {
                 UserName = parameters.UserName,
                 Password = parameters.Password
-            });
+            }).ConfigureAwait(false);
         }
 
         [ApiExplorerSettings(IgnoreApi = true)]
@@ -72,13 +81,21 @@ namespace CallCenter.Agent.Server.Controllers
         [HttpGet]
         public CurrentUser CurrentUserInfo()
         {
-            return new CurrentUser
+            var userClaims = new List<UserClaimsList>();
+            userClaims.AddRange(from claim in User.Claims
+                                select new UserClaimsList
+                                {
+                                    Key = claim.Type,
+                                    Value = claim.Value
+                                });
+
+            var currentUser = new CurrentUser
             {
                 IsAuthenticated = User.Identity.IsAuthenticated,
-                UserName = User.Identity.Name,
-                Claims = User.Claims
-                .ToDictionary(c => c.Type, c => c.Value)
+                UserName = User.Identity.Name
             };
+            currentUser.Claims = userClaims;
+            return currentUser;
         }
 
         [HttpGet("{userId}")]
