@@ -58,7 +58,7 @@ namespace CallCenter.Agent.Server
                 });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ApplicationDBContext applicationDBContext, CallCenterDbContext callCenterDbContext)
         {
             if (env.IsDevelopment())
             {
@@ -70,6 +70,9 @@ namespace CallCenter.Agent.Server
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
+            applicationDBContext.Database.Migrate();
+            callCenterDbContext.Database.Migrate();
 
             app.UseCors(x => x
                 .AllowAnyOrigin()
