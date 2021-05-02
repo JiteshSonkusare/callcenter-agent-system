@@ -16,28 +16,35 @@ In CallCenter.Agent.Server project - use your local database source
 
 	Update connection string in appsettings.json
 
-## Setup database locally 
-	verify <CallCenter.Agent.Server> application should be selected as startup applicaiton
-	open <package manager console> and run the below EF code first command
+## Setup database locally
 
-Create Identity Database for User -
+	Database will be create on application startup.
+	
+	OR
+	
+	You can follow below instruction to create databse manually if it won't create on application startup -
+
+	verify <CallCenter.Agent.Server> application should be selected as startup applicaiton
+	open <package manager console> and run the below EF code first commands
+
+Create user identity dtabase -
 	
 	add-migration CallCenterUserDatabase -Context ApplicationDBContext
 	update-database -Context ApplicationDBContext
 
 
-Create Agent System Database -
+Create agent system database -
 	
 	add-migration CallCenterDatabase -Context CallCenterDbContext
 	update-database -Context CallCenterDbContext
 	
-Verify the database in sql server studio
+	Verify the database in sql server studio
 
 ## Run Application
 
 	verify - CallCenter.Agent.Server application should be selected as startup applicaiton
 	
-	run application 
+	run application
 	
 ## Check Swagger Page
 
@@ -51,7 +58,7 @@ Verify the database in sql server studio
 	
 	once the user is created and logged-in, user can only see the home page as he don't have any roles currently.
 	
-## Add User Role
+## Add User Role from Swagger
 
 	Go swagger page - https://localhost:44399/swagger/index.html
 	use: ./api/Auth/AddUserRole enpoint to create a user role
