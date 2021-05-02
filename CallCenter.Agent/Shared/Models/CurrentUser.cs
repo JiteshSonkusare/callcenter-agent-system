@@ -6,6 +6,6 @@ namespace CallCenter.Agent.Shared.Models
     {
         public bool IsAuthenticated { get; set; }
         public string UserName { get; set; }
-        public IList<UserClaimsList> Claims { get; set; }
+        public IList<UserClaim> Claims { get; set; }
     }
 }

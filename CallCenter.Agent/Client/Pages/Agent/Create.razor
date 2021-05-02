@@ -1,6 +1,7 @@
 ﻿@page "/agent/create"
 @inject HttpClient http
 @inject NavigationManager uriHelper
+@inject CustomStateProvider authStateProvider
 
 <h3>Create</h3>
 
@@ -10,6 +11,9 @@
     Agent ag = new Agent();
     async Task CreateAgent()
     {
+        if (authStateProvider._currentUser != null)
+            ag.CreatedBy = authStateProvider._currentUser.UserName;
+
         await http.PostAsJsonAsync("api/agent", ag);
         uriHelper.NavigateTo("agent");
     }

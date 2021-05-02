@@ -15,6 +15,7 @@ namespace CallCenter.Agent.Server.Application.Agent.Commands
         public int? PhoneNumber { get; set; }
         public string Email { get; set; }
         public int Skill { get; set; }
+        public string CreatedBy { get; set; }
 
         public class Handler : IRequestHandler<CreateOrUpdateAgentCommand, int>
         {
@@ -27,23 +28,32 @@ namespace CallCenter.Agent.Server.Application.Agent.Commands
 
             public async Task<int> Handle(CreateOrUpdateAgentCommand request, CancellationToken cancellationToken)
             {
-                var entity = new Shared.Models.Agent();
+                try
+                {
+                    var entity = new Shared.Models.Agent();
 
-                if (request.Id != 0)
-                    entity = await _context.Agents.FindAsync(request.Id);
-                else
-                    entity = new Shared.Models.Agent();
+                    if (request.Id != 0)
+                        entity = await _context.Agents.FindAsync(request.Id);
+                    else
+                        entity = new Shared.Models.Agent();
 
-                entity.UserId      = request.UserId;
-                entity.Name        = request.Name;
-                entity.PhoneNumber = request.PhoneNumber;
-                entity.Email       = request.Email;
-                entity.Skill       = request.Skill;
+                    entity.UserId = request.UserId;
+                    entity.Name = request.Name;
+                    entity.PhoneNumber = request.PhoneNumber;
+                    entity.Email = request.Email;
+                    entity.Skill = request.Skill;
+                    entity.CreatedBy = request.CreatedBy ?? "Swagger";
+                    entity.Created = DateTime.Now;
 
-                _context.Agents.Add(entity);
-                await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                    _context.Agents.Add(entity);
+                    await _context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
-                return entity.Id;
+                    return entity.Id;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
         }
     }

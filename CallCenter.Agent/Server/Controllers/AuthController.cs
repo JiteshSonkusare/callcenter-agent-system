@@ -81,14 +81,16 @@ namespace CallCenter.Agent.Server.Controllers
         [HttpGet]
         public CurrentUser CurrentUserInfo()
         {
-            var userClaims = new List<UserClaimsList>();
-            userClaims.AddRange(from claim in User.Claims
-                                select new UserClaimsList
-                                {
-                                    Key = claim.Type,
-                                    Value = claim.Value
-                                });
-
+            var userClaims = new List<UserClaim>();
+            if (User.Claims != null)
+            {
+                userClaims.AddRange(from claim in User.Claims
+                                    select new UserClaim
+                                    {
+                                        Key = claim.Type,
+                                        Value = claim.Value
+                                    });
+            }
             var currentUser = new CurrentUser
             {
                 IsAuthenticated = User.Identity.IsAuthenticated,

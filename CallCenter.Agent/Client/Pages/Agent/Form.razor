@@ -37,12 +37,15 @@
     <div class="form-group ">
         <div>
             <label>Skill :</label>
-            <select class="form-control selectpicker" @bind="ag.Skill">
-                <option value="-1">--select--</option>
-                @foreach (var item in skills)
-                {
-<option value="@item.Id">@item.Name</option>                }
-            </select>
+            <div>
+                <select class="form-control selectpicker" @bind="ag.Skill">
+                    <option value="-1">--select--</option>
+                    @foreach (var item in skills)
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </div>
         </div>
     </div>
 
@@ -54,13 +57,13 @@
 
 
 @code { [Parameter] public Agent ag { get; set; }
-            [Parameter] public string ButtonText { get; set; } = "Save";
-            [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
 
 
-            Skill[] skills;
+    Skill[] skills;
 
-            protected override async Task OnInitializedAsync()
-            {
-                skills = await SkillsService.GetSkills();
-            } }
+    protected override async Task OnInitializedAsync()
+    {
+        skills = await SkillsService.GetSkills();
+    } }

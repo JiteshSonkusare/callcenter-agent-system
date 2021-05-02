@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using CallCenter.Agent.Server.Application.Interfaces;
+using CallCenter.Agent.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CallCenter.Agent.Server.Persistence
@@ -14,22 +15,6 @@ namespace CallCenter.Agent.Server.Persistence
         }
 
         public DbSet<Shared.Models.Agent> Agents { get; set; }
-
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToen)
-        {
-            foreach (var entry in ChangeTracker.Entries<Shared.Models.AuditableEntity>())
-            {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        entry.Entity.CreatedBy = "Test";
-                        entry.Entity.Created = DateTime.Now;
-                        break;
-                }
-            }
-
-            return base.SaveChangesAsync(cancellationToen);
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

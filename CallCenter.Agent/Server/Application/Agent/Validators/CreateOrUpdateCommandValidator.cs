@@ -9,7 +9,8 @@ namespace CallCenter.Agent.Server.Application.Agent.Commands
         {
             RuleFor(c => c.UserId)
                 .MaximumLength(7)
-                .NotEmpty(); //ToDo: add custom validation
+                .Matches(new Regex(@"^[a-zA-Z]{2}[0-9]{5}$"))
+                .NotEmpty();
 
             RuleFor(c => c.Name)
                 .NotEmpty()
