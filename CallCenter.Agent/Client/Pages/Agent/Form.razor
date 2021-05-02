@@ -5,7 +5,7 @@
     <div class="form-group">
         <label>User Id :</label>
         <div>
-            <InputText @bind-Value="@ag.UserId" />
+            <InputText @bind-Value="@ag.UserId" class="form-control"/>
             <ValidationMessage For="@(() => ag.UserId)" />
         </div>
     </div>
@@ -13,7 +13,7 @@
         <div>
             <label>Name :</label>
             <div>
-                <InputText @bind-Value="@ag.Name" />
+                <InputText @bind-Value="@ag.Name" class="form-control"/>
                 <ValidationMessage For="@(() => ag.Name)" />
             </div>
         </div>
@@ -22,7 +22,8 @@
         <div>
             <label>Phone Number :</label>
             <div>
-                <InputNumber @bind-Value="@ag.PhoneNumber" />
+                <InputNumber @bind-Value="@ag.PhoneNumber" class="form-control" />
+                <ValidationMessage For="@(() => ag.PhoneNumber)" />
             </div>
         </div>
     </div>
@@ -30,7 +31,8 @@
         <div>
             <label>Email :</label>
             <div>
-                <InputText @bind-Value="@ag.Email" />
+                <InputText @bind-Value="@ag.Email" class="form-control" />
+                <ValidationMessage For="@(() => ag.Email)" />
             </div>
         </div>
     </div>
@@ -38,13 +40,14 @@
         <div>
             <label>Skill :</label>
             <div>
-                <select class="form-control selectpicker" @bind="ag.Skill">
-                    <option value="-1">--select--</option>
+                <select class="form-control" @bind="ag.Skill">
+                    <option value="0">--Select Skill--</option>
                     @foreach (var item in skills)
                     {
                         <option value="@item.Id">@item.Name</option>
                     }
                 </select>
+                <ValidationMessage For="@(() => ag.Skill)" />
             </div>
         </div>
     </div>
